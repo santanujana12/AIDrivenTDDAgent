@@ -74,11 +74,15 @@ export const adfToPlainText = (node: AdfNode | null | undefined): string => {
 };
 
 export const getMyTickets = async (credentials: JiraCredentials): Promise<MyTicketsResponse> => {
-  const query = new URLSearchParams({
-    jql: 'assignee=currentUser() ORDER BY updated DESC',
-    fields: 'summary,description,status,issuetype,priority',
+  const raw = await jiraRequest<{ issues?: JiraIssue[] }>(credentials, 'search/jql', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      jql: 'assignee = currentUser() ORDER BY updated DESC',
+      fields: ['summary', 'description', 'status', 'issuetype', 'priority'],
+      maxResults: 50,
+    }),
   });
-  const raw = await jiraRequest<{ issues?: JiraIssue[] }>(credentials, `search?${query.toString()}`);
   const tickets: JiraTicket[] = (raw.issues ?? []).map((issue) => ({
     id: issue.id ?? '',
     key: issue.key ?? '',
