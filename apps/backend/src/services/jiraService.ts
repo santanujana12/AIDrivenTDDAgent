@@ -51,7 +51,8 @@ const jiraRequest = async <T>(credentials: JiraCredentials, path: string, init?:
       ...init,
       headers: { ...jiraHeaders(credentials), ...init?.headers },
     });
-  } catch {
+  } catch (networkError) {
+    console.error('Jira network error:', networkError);
     throw new ApiError('Unable to reach Jira. Check the Jira domain and try again.', 502);
   }
 

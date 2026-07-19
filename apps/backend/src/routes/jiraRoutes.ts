@@ -9,7 +9,7 @@ import type { JiraRequest } from '../types';
 export const jiraRouter = Router();
 jiraRouter.use(jiraAuth);
 
-const issueIdFrom = (value: string | string[]) => {
+const requireIssueId = (value: string | string[]) => {
   const issueId = Array.isArray(value) ? value[0] : value;
   if (!issueId?.trim()) throw new ApiError('issueId is required.', 400);
   return issueId;
@@ -21,7 +21,7 @@ jiraRouter.get('/my-tickets', asyncHandler(async (request, response) => {
 }));
 
 jiraRouter.get('/tickets/:issueId/transitions', asyncHandler(async (request, response) => {
-  const body = await getTransitions((request as JiraRequest).jiraCredentials, issueIdFrom(request.params.issueId));
+  const body = await getTransitions((request as JiraRequest).jiraCredentials, requireIssueId(request.params.issueId));
   response.json(body);
 }));
 
@@ -30,7 +30,7 @@ jiraRouter.post('/tickets/:issueId/transition', asyncHandler(async (request, res
   if (!transitionId?.trim()) throw new ApiError('transitionId is required.', 400);
 
   try {
-    await transitionTicket((request as JiraRequest).jiraCredentials, issueIdFrom(request.params.issueId), transitionId);
+    await transitionTicket((request as JiraRequest).jiraCredentials, requireIssueId(request.params.issueId), transitionId);
     const body: TransitionResponse = { success: true };
     response.json(body);
   } catch (error) {

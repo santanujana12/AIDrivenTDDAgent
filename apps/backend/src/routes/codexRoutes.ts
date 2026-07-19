@@ -30,19 +30,29 @@ const validateFiles = (files: unknown): RepoFile[] => {
 export const codexRouter = Router();
 
 codexRouter.post('/generate-tests', asyncHandler(async (request, response) => {
-  const body = request.body as GenerateTestsRequestBody;
-  if (!body.ticketSummary?.trim()) throw new ApiError('ticketSummary is required.', 400);
+  const body = request.body as Partial<GenerateTestsRequestBody>;
+
+  if (typeof body.ticketSummary !== 'string' || !body.ticketSummary.trim()) {
+    throw new ApiError('ticketSummary must be a non-empty string.', 400);
+  }
+  const ticketDescription = typeof body.ticketDescription === 'string' ? body.ticketDescription : '';
   const files = validateFiles(body.files);
-  const result = await generateTests(body.ticketSummary, body.ticketDescription ?? '', files);
+
+  const result = await generateTests(body.ticketSummary, ticketDescription, files);
   response.json(result as GenerateTestsResponse);
 }));
 
 codexRouter.post('/generate-implementation', asyncHandler(async (request, response) => {
-  const body = request.body as GenerateImplementationRequestBody;
-  if (!body.testFileName?.trim() || !body.testFileContent?.trim()) {
-    throw new ApiError('testFileName and testFileContent are required.', 400);
+  const body = request.body as Partial<GenerateImplementationRequestBody>;
+
+  if (typeof body.testFileName !== 'string' || !body.testFileName.trim()) {
+    throw new ApiError('testFileName must be a non-empty string.', 400);
+  }
+  if (typeof body.testFileContent !== 'string' || !body.testFileContent.trim()) {
+    throw new ApiError('testFileContent must be a non-empty string.', 400);
   }
   const files = validateFiles(body.files);
+
   const result = await generateImplementation(body.testFileName, body.testFileContent, files);
   response.json(result as GenerateImplementationResponse);
 }));
