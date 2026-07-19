@@ -45,3 +45,8 @@ Thumbs.db
 .claude/settings.local.json
 
 vite.config.*.timestamp*
+
+# secrets — never commit real credentials
+.env
+.env.local
+!.env.example

@@ -1,38 +1,15 @@
-import './app.css';
+import { useAppSelector } from '../store/store';
+import { JiraConnectForm } from '../components/JiraConnectForm';
+import { TicketDashboard } from '../components/TicketDashboard';
 
+/**
+ * Root component — renders the connect screen when credentials are not set,
+ * and the ticket dashboard once the user has connected. No routing library
+ * needed for this two-screen app.
+ */
 export function App() {
-  return (
-    <div>
-      <h1>
-        <span> Hello there, </span>
-        Welcome frontend 👋
-      </h1>
-    </div>
-  );
+  const isConnected = useAppSelector((state) => state.jiraAuth.isConnected);
+  return isConnected ? <TicketDashboard /> : <JiraConnectForm />;
 }
+
 export default App;
-
- 
-if (import.meta.vitest) {
-  // add tests related to your file here
-  // For more information please visit the Vitest docs site here: https://vitest.dev/guide/in-source.html
-  
-  const { it, expect, beforeEach } = import.meta.vitest;
-  let render: typeof import('@testing-library/react').render;
-
-  beforeEach(async () => {
-    render = (await import('@testing-library/react')).render;
-  });
-
-  it('should render successfully', () => {
-    const { baseElement } = render(<App />);
-    expect(baseElement).toBeTruthy();
-  });
-
-  it('should have a greeting as the title', () => {
-    const { getAllByText } = render(<App />);
-    expect(getAllByText(new RegExp('Welcome frontend', 'gi')).length > 0).toBeTruthy();
-  });
-
-}
- 
