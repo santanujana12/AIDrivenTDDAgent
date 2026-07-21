@@ -6,6 +6,7 @@ import { Skeleton } from './ui/skeleton';
 import { TicketCard } from './TicketCard';
 import { RepoConnector } from './RepoConnector';
 import { FileSelectionDialog } from './FileSelectionDialog';
+import { ThemeToggle } from './ThemeToggle';
 import { useMyTickets } from '../hooks/useMyTickets';
 import { useAppDispatch } from '../store/store';
 import { clearCredentials } from '../store/jiraAuthSlice';
@@ -46,6 +47,7 @@ export function TicketDashboard() {
 
           <div className="flex items-center gap-2">
             <RepoConnector />
+            <ThemeToggle />
             <Button
               variant="outline"
               size="sm"

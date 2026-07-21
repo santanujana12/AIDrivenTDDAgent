@@ -5,6 +5,7 @@ import { Button } from './ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
+import { ThemeToggle } from './ThemeToggle';
 import { useAppDispatch } from '../store/store';
 import { setCredentials } from '../store/jiraAuthSlice';
 import * as apiClient from '../api/apiClient';
@@ -45,7 +46,11 @@ export function JiraConnectForm() {
   );
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background p-4">
+    <div className="relative flex min-h-screen items-center justify-center bg-background p-4">
+      {/* Theme toggle — top-right corner */}
+      <div className="absolute right-4 top-4">
+        <ThemeToggle />
+      </div>
       <Card className="w-full max-w-md shadow-lg">
         <CardHeader className="text-center">
           <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
