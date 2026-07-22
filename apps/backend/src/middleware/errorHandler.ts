@@ -2,10 +2,7 @@ import type { NextFunction, Request, Response } from 'express';
 import type { ApiErrorResponse } from '@ticket-tdd/shared-types';
 
 export class ApiError extends Error {
-  constructor(
-    message: string,
-    public readonly statusCode = 500
-  ) {
+  constructor(message: string,public readonly statusCode = 500) {
     super(message);
   }
 }
